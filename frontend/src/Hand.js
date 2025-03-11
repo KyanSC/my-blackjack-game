@@ -8,7 +8,7 @@ const Hand = ({ cards }) => {
       justifyContent: "center",
       alignItems: "center",
       gap: "-30px",  // Cards will overlap slightly like real card hands
-      position: "relative",
+      position: "relative", 
       marginTop: "20px"
     }}>
       {cards.map((card, index) => (
