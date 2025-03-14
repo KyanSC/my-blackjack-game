@@ -118,10 +118,22 @@ def hit():
         }
     elif value == 21:
         game_over = True
+        # Dealer must play out their hand
+        while hand_value(dealer_hand) < 17:
+            dealer_hand.append(draw_card())
+        
+        dealer_value = hand_value(dealer_hand)
+        if dealer_value > 21:
+            result = "You win! Dealer busts!"
+        elif dealer_value == 21:
+            result = "Push! Both got 21!"
+        else:
+            result = "You win with 21!"
+            
         return {
             "player_hand": player_hand,
             "dealer_hand": dealer_hand,
-            "message": "21! Let's see what the dealer has..."
+            "message": result
         }
     
     return {"player_hand": player_hand, "message": f"Your hand is worth {value}"}

@@ -15,6 +15,7 @@ function App() {
   const [gameState, setGameState] = useState("idle"); // idle, playing, ended
   const [isBlackjack, setIsBlackjack] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   // Add effect to handle blackjack timer
   useEffect(() => {
@@ -69,24 +70,27 @@ function App() {
   const hit = async () => {
     if (gameState !== "playing" || isLoading) return;
     
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const response = await fetch("http://127.0.0.1:8000/hit");
-      const data = await response.json();
-      setPlayerHand(data.player_hand);
-      if (data.message) {
-        setMessage(data.message);
-        if (data.message.toLowerCase().includes("bust") || 
-            data.message.toLowerCase().includes("21")) {
-          setGameState("ended");
+        const response = await fetch('http://localhost:8000/hit');
+        const data = await response.json();
+        setPlayerHand(data.player_hand);
+        if (data.dealer_hand) {  // If dealer's hand is returned (game over)
+            setDealerHand(data.dealer_hand);
+            setGameState("ended");
+            if (data.message.includes("win")) {
+                showCelebration();
+            }
         }
-      }
+        // Also set game state to ended if player busts or gets 21
+        if (data.message && (data.message.includes("Bust") || data.message.includes("21"))) {
+            setGameState("ended");
+        }
+        setMessage(data.message);
     } catch (error) {
-      console.error("Error during hit:", error);
-      setMessage("Error during hit.");
-    } finally {
-      setIsLoading(false);
+        setMessage("Error connecting to server");
     }
+    setIsLoading(false);
   };
 
   /**
