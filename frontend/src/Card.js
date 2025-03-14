@@ -1,38 +1,105 @@
-import { motion } from "framer-motion";
 import React from "react";
 
-const Card = ({ card, delay }) => {
-  // Map rank and suit to image file names (assuming you're storing local images)
-  const getCardImage = (rank, suit) => {
-    const suitShort = suit.toLowerCase().charAt(0); // "hearts" → "h"
-    const rankShort = rank === "10" ? "10" : rank.charAt(0).toUpperCase(); // "Ace" → "A"
-    return `/cards/${rankShort}${suitShort}.png`; // Example: "/cards/3d.png" for 3 of Diamonds
+/**
+ * Card component that displays a playing card with animation
+ * @param {Object} props - Component props
+ * @param {string} props.rank - Card rank
+ * @param {string} props.suit - Card suit
+ * @param {boolean} props.hidden - Whether the card is hidden
+ */
+const Card = ({ rank, suit, hidden }) => {
+  // Get suit symbol and color
+  const getSuitSymbol = (suit) => {
+    switch (suit) {
+      case 'Hearts': return { symbol: '♥', color: '#E94F37' };
+      case 'Diamonds': return { symbol: '♦', color: '#E94F37' };
+      case 'Clubs': return { symbol: '♣', color: '#393E41' };
+      case 'Spades': return { symbol: '♠', color: '#393E41' };
+      default: return { symbol: '★', color: '#44BBA4' };
+    }
   };
 
+  // Format rank for display
+  const getDisplayRank = (rank) => {
+    switch (rank) {
+      case 'A': return 'A';
+      case 'K': return 'K';
+      case 'Q': return 'Q';
+      case 'J': return 'J';
+      default: return rank;
+    }
+  };
+
+  const { symbol, color } = getSuitSymbol(suit);
+  const displayRank = getDisplayRank(rank);
+  const isHidden = hidden || suit === "Hidden";
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
+    <div
       style={{
         display: "inline-block",
         margin: "5px",
         position: "relative",
-        width: "80px",
-        height: "120px"
+        width: "120px",
+        height: "180px",
+        backgroundColor: isHidden ? "#44BBA4" : "#FFFFFF",
+        borderRadius: "12px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+        border: "1px solid rgba(0,0,0,0.1)",
+        overflow: "hidden"
       }}
     >
-      <img 
-        src={getCardImage(card.rank, card.suit)} 
-        alt={`${card.rank} of ${card.suit}`} 
-        style={{
+      {!isHidden ? (
+        <div style={{
           width: "100%",
           height: "100%",
-          borderRadius: "8px",
-          boxShadow: "2px 2px 10px rgba(0,0,0,0.2)"
-        }}
-      />
-    </motion.div>
+          padding: "12px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between"
+        }}>
+          {/* Top rank and suit */}
+          <div style={{ color: color, fontSize: "24px", fontWeight: "bold" }}>
+            {displayRank}
+            <span style={{ marginLeft: "4px" }}>{symbol}</span>
+          </div>
+
+          {/* Center suit */}
+          <div style={{ 
+            color: color,
+            fontSize: "60px",
+            textAlign: "center",
+            transform: "translateY(-10px)"
+          }}>
+            {symbol}
+          </div>
+
+          {/* Bottom rank and suit (inverted) */}
+          <div style={{ 
+            color: color,
+            fontSize: "24px",
+            fontWeight: "bold",
+            alignSelf: "flex-end",
+            transform: "rotate(180deg)"
+          }}>
+            {displayRank}
+            <span style={{ marginLeft: "4px" }}>{symbol}</span>
+          </div>
+        </div>
+      ) : (
+        <div style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "60px",
+          color: "#FFFFFF"
+        }}>
+          ★
+        </div>
+      )}
+    </div>
   );
 };
 

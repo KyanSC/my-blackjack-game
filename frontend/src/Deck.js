@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 import React from "react";
 
+/**
+ * Deck component that displays the card deck with a subtle floating animation
+ * Used as a visual element to indicate where cards are drawn from
+ */
 const Deck = () => {
   return (
     <motion.div

@@ -9,6 +9,7 @@ app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
 
+# CORS configuration to allow frontend requests from local development servers
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
@@ -22,22 +23,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#Ignore this
-
-#Card Deck
-suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+# Initialize standard 52-card deck with suits and ranks
+suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']  # First letter capitalized
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']  # Face cards capitalized
 deck = [{"suit": suit, "rank": rank} for suit in suits for rank in ranks]
 
-#Game State
+# Track game state
 player_hand = []
 dealer_hand = []
 game_over = False
 
 def draw_card():
+    """Draw a random card from the deck and remove it."""
     return deck.pop(random.randint(0, len(deck) - 1))
 
 def hand_value(hand):
+    """Calculate the value of a hand, handling special cases for face cards and aces."""
     value = 0
     aces = 0
     for card in hand:
@@ -53,60 +54,114 @@ def hand_value(hand):
         aces -= 1
     return value
 
+def check_blackjack(hand):
+    """Check if a hand is a blackjack (21 with exactly 2 cards)."""
+    return len(hand) == 2 and hand_value(hand) == 21
+
 @app.get("/start")
 def start_game():
+    """Initialize a new game by shuffling the deck and dealing initial cards."""
     global player_hand, dealer_hand, deck, game_over
     deck = [{"suit": suit, "rank": rank} for suit in suits for rank in ranks]
     random.shuffle(deck)
     player_hand = [draw_card(), draw_card()]
     dealer_hand = [draw_card(), draw_card()]
     game_over = False
+
+    # Check for blackjack
+    player_blackjack = check_blackjack(player_hand)
+    dealer_blackjack = check_blackjack(dealer_hand)
+
+    if player_blackjack or dealer_blackjack:
+        game_over = True
+        # Show both dealer cards if either has blackjack
+        response = {
+            "player_hand": player_hand,
+            "dealer_hand": dealer_hand,
+        }
+        if player_blackjack and dealer_blackjack:
+            response["message"] = "Both have Blackjack! Push!"
+        elif player_blackjack:
+            response["message"] = "🎉 BLACKJACK! You win! 🎉"
+        else:
+            response["message"] = "Dealer has Blackjack! You lose!"
+        return response
+
     return {
-        "player_hand": player_hand, 
+        "player_hand": player_hand,
         "dealer_hand": [
             dealer_hand[0],
-            {"suit": "Hidden", "rank": "Hidden"} #Hidden dealer card
+            {"suit": "Hidden", "rank": "Hidden"}
         ]
     }
 
 @app.get("/hit")
-def hit(): 
+def hit():
+    """Player draws another card. Game ends if player busts (over 21)."""
     global game_over
     if game_over:
-        return {"message": "Game over! Start a new game"}
+        return {
+            "player_hand": player_hand,
+            "dealer_hand": dealer_hand,
+            "message": "Game is over! Please start a new game."
+        }
     
     player_hand.append(draw_card())
     value = hand_value(player_hand)
 
     if value > 21:
         game_over = True
-        return {"player_hand": player_hand, "dealer_hand": dealer_hand, "message": "Bust! You lose!"}
+        return {
+            "player_hand": player_hand,
+            "dealer_hand": dealer_hand,
+            "message": "Bust! You lose!"
+        }
+    elif value == 21:
+        game_over = True
+        return {
+            "player_hand": player_hand,
+            "dealer_hand": dealer_hand,
+            "message": "21! Let's see what the dealer has..."
+        }
     
-    return {"player_hand": player_hand, "message": "Nice hit!"}
+    return {"player_hand": player_hand, "message": f"Your hand is worth {value}"}
 
 @app.get("/stand")
 def stand():
+    """Player stands, dealer draws until 17 or higher, then determine winner."""
     global game_over
+    if game_over:
+        return {
+            "player_hand": player_hand,
+            "dealer_hand": dealer_hand,
+            "result": "Game is over! Please start a new game."
+        }
+
     while hand_value(dealer_hand) < 17:
         dealer_hand.append(draw_card())
 
     player_score = hand_value(player_hand)
     dealer_score = hand_value(dealer_hand)
 
-    if dealer_score > 21 or player_score > dealer_score:
-        result = "You win!"
-    elif dealer_score == player_score:
-        result = "Push!"
-    else: 
-        result = "Dealers wins!"
-
     game_over = True
-    return {"player_hand": player_hand, "dealer_hand": dealer_hand, "result": result}
 
+    if dealer_score > 21:
+        result = "Dealer busts! You win! 🎉"
+    elif player_score > dealer_score:
+        result = "You win! 🎉"
+    elif dealer_score == player_score:
+        result = "Push! It's a tie!"
+    else:
+        result = "Dealer wins!"
 
-from fastapi import FastAPI
+    return {
+        "player_hand": player_hand,
+        "dealer_hand": dealer_hand,
+        "result": result
+    }
 
 @app.get("/")
 def read_root():
+    """Welcome endpoint for the API."""
     return {"message": "Welcome to the Blackjack app!"}
 
