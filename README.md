@@ -5,6 +5,8 @@ A web-based implementation of the classic Blackjack card game, built with React 
 ## 🚀 Play Now!
 
 Visit [https://blackjack-kyan.vercel.app](https://blackjack-kyan.vercel.app) to play the game directly in your browser.
+
+
 **Note:** This game runs on **mobile devices**, but the full screen may not be visible. For the best experience, play on a **desktop or laptop**.
 
 ## Features
