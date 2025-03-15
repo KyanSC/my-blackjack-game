@@ -6,36 +6,31 @@ import { motion, AnimatePresence } from "framer-motion";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 console.log('Backend URL:', BACKEND_URL);
 
-/**
- * Main App component that manages the Blackjack game state and user interactions
- * Handles game logic through API calls to the backend server
- */
+// My main game component
 function App() {
-  // Game state management
+  // Setting up game states
   const [message, setMessage] = useState("");
   const [playerHand, setPlayerHand] = useState([]);
   const [dealerHand, setDealerHand] = useState([]);
-  const [gameState, setGameState] = useState("idle"); // idle, playing, ended
+  const [gameState, setGameState] = useState("idle");
   const [isBlackjack, setIsBlackjack] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [gameOver, setGameOver] = useState(false);
 
-  // Add effect to handle blackjack timer
+  // Timer for blackjack celebration
   useEffect(() => {
     let timer;
     if (isBlackjack) {
       timer = setTimeout(() => {
         setIsBlackjack(false);
-      }, 2500); // Show celebration for 2.5 seconds
+      }, 2500);
     }
     return () => {
       if (timer) clearTimeout(timer);
     };
   }, [isBlackjack]);
 
-  /**
-   * Initializes a new game by dealing initial cards to player and dealer
-   */
+  // Start a new game
   const startGame = async () => {
     try {
       setIsLoading(true);
@@ -55,7 +50,6 @@ function App() {
         if (data.message.toLowerCase().includes("blackjack")) {
           setIsBlackjack(true);
           setGameState("ended");
-          // Show confetti animation for player blackjack
           if (data.message.includes("You win")) {
             showCelebration();
           }
@@ -69,10 +63,7 @@ function App() {
     }
   };
 
-  /**
-   * Player draws another card from the deck
-   * Game ends if player busts (over 21)
-   */
+  // Player hits for another card
   const hit = async () => {
     if (gameState !== "playing" || isLoading) return;
     
@@ -84,14 +75,13 @@ function App() {
       const data = await response.json();
       console.log('Hit data:', data);
       setPlayerHand(data.player_hand);
-      if (data.dealer_hand) {  // If dealer's hand is returned (game over)
+      if (data.dealer_hand) {
         setDealerHand(data.dealer_hand);
         setGameState("ended");
         if (data.message.includes("win")) {
           showCelebration();
         }
       }
-      // Also set game state to ended if player busts or gets 21
       if (data.message && (data.message.includes("Bust") || data.message.includes("21"))) {
         setGameState("ended");
       }
@@ -103,10 +93,7 @@ function App() {
     setIsLoading(false);
   };
 
-  /**
-   * Player stands, dealer draws until 17 or higher
-   * Determines winner and ends the game
-   */
+  // Player stands with current hand
   const stand = async () => {
     if (gameState !== "playing" || isLoading) return;
     
@@ -133,14 +120,15 @@ function App() {
     }
   };
 
+  // cool confetti celebration
   const showCelebration = () => {
-    // Create confetti effect
     const colors = ['#FFE66D', '#4ECDC4', '#FF6B6B', '#45B7D1'];
     for (let i = 0; i < 100; i++) {
       createConfetti(colors[Math.floor(Math.random() * colors.length)]);
     }
   };
 
+  // Creates a single confetti piece
   const createConfetti = (color) => {
     const confetti = document.createElement('div');
     confetti.style.position = 'fixed';

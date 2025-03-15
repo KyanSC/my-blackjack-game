@@ -1,5 +1,5 @@
 # Kyan Santiago-Calling
-# Blackjack backend server
+# My Blackjack Game Backend
 # 2025-02-06
 
 from fastapi import FastAPI
@@ -9,35 +9,36 @@ app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
 
-# Add CORS middleware
+# Setting up CORS for frontend URLs
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",  # Local development
-        "https://blackjack-frontend-nf1ad9xdt-kyans-projects-4396b957.vercel.app",  # Your Vercel deployment
-        "https://blackjack-game-kyan.vercel.app"  # Your Vercel deployment (alternate URL)
+        "http://localhost:3000",  # For testing on my computer
+        "https://blackjack-frontend-nf1ad9xdt-kyans-projects-4396b957.vercel.app",  
+        "https://blackjack-kyan.vercel.app",
+        "https://blackjack-game-kyan.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Initialize standard 52-card deck with suits and ranks
-suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']  # First letter capitalized
-ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']  # Face cards capitalized
+# Setting up the deck
+suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 deck = [{"suit": suit, "rank": rank} for suit in suits for rank in ranks]
 
-# Track game state
+# Game variables
 player_hand = []
 dealer_hand = []
 game_over = False
 
 def draw_card():
-    """Draw a random card from the deck and remove it."""
+    # Takes a random card from the deck
     return deck.pop(random.randint(0, len(deck) - 1))
 
 def hand_value(hand):
-    """Calculate the value of a hand, handling special cases for face cards and aces."""
+    # Figures out the value of a hand
     value = 0
     aces = 0
     for card in hand:
@@ -48,18 +49,19 @@ def hand_value(hand):
             aces += 1
         else:
             value += int(card["rank"])
+    # Handle aces being 1 or 11
     while value > 21 and aces:
         value -= 10
         aces -= 1
     return value
 
 def check_blackjack(hand):
-    """Check if a hand is a blackjack (21 with exactly 2 cards)."""
+    # Checks if it's a blackjack (21 with 2 cards)
     return len(hand) == 2 and hand_value(hand) == 21
 
 @app.get("/start")
 def start_game():
-    """Initialize a new game by shuffling the deck and dealing initial cards."""
+    # Starts a new game
     global player_hand, dealer_hand, deck, game_over
     deck = [{"suit": suit, "rank": rank} for suit in suits for rank in ranks]
     random.shuffle(deck)
@@ -67,13 +69,12 @@ def start_game():
     dealer_hand = [draw_card(), draw_card()]
     game_over = False
 
-    # Check for blackjack
+    # Check if anyone got blackjack
     player_blackjack = check_blackjack(player_hand)
     dealer_blackjack = check_blackjack(dealer_hand)
 
     if player_blackjack or dealer_blackjack:
         game_over = True
-        # Show both dealer cards if either has blackjack
         response = {
             "player_hand": player_hand,
             "dealer_hand": dealer_hand,
@@ -96,7 +97,7 @@ def start_game():
 
 @app.get("/hit")
 def hit():
-    """Player draws another card. Game ends if player busts (over 21)."""
+    # Player takes another card
     global game_over
     if game_over:
         return {
@@ -117,7 +118,7 @@ def hit():
         }
     elif value == 21:
         game_over = True
-        # Dealer must play out their hand
+        # Dealer plays out their hand
         while hand_value(dealer_hand) < 17:
             dealer_hand.append(draw_card())
         
@@ -139,7 +140,7 @@ def hit():
 
 @app.get("/stand")
 def stand():
-    """Player stands, dealer draws until 17 or higher, then determine winner."""
+    # Player stays with current hand
     global game_over
     if game_over:
         return {
@@ -173,6 +174,6 @@ def stand():
 
 @app.get("/")
 def read_root():
-    """Welcome endpoint for the API."""
-    return {"message": "Welcome to the Blackjack app!"}
+    # Welcome message
+    return {"message": "Welcome to my Blackjack game!"}
 
