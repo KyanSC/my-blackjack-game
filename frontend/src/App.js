@@ -213,8 +213,8 @@ function App() {
         justifyContent: "center",
         width: "100%",
         maxWidth: "100%",
-        padding: "0",
-        overflow: "hidden"
+        padding: "0 0.5rem",
+        overflow: "visible"
       }}>
         <motion.button
           whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
@@ -222,8 +222,8 @@ function App() {
           onClick={startGame}
           disabled={gameState === "playing" || isLoading}
           style={{
-            padding: "0.8rem 1.5rem",
-            fontSize: "clamp(1rem, 4vw, 1.2rem)",
+            padding: "0.8rem 1rem",
+            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
             backgroundColor: gameState === "playing" ? "#666" : "#FF6B6B",
             color: "white",
             border: "none",
@@ -233,11 +233,12 @@ function App() {
             transition: "all 0.2s ease",
             opacity: isLoading ? 0.7 : 1,
             flex: "1",
-            minWidth: "120px",
-            maxWidth: "200px"
+            minWidth: "100px",
+            maxWidth: "180px",
+            whiteSpace: "nowrap"
           }}
         >
-          {gameState === "playing" ? "Game in Progress" : "Start Game"}
+          {gameState === "playing" ? "In Progress" : "Start Game"}
         </motion.button>
         <motion.button
           whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
@@ -245,8 +246,8 @@ function App() {
           onClick={hit}
           disabled={gameState !== "playing" || isLoading}
           style={{
-            padding: "0.8rem 1.5rem",
-            fontSize: "clamp(1rem, 4vw, 1.2rem)",
+            padding: "0.8rem 1rem",
+            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
             backgroundColor: gameState === "playing" ? "#4ECDC4" : "#666",
             color: "white",
             border: "none",
@@ -256,8 +257,8 @@ function App() {
             transition: "all 0.2s ease",
             opacity: isLoading ? 0.7 : 1,
             flex: "1",
-            minWidth: "120px",
-            maxWidth: "200px"
+            minWidth: "100px",
+            maxWidth: "180px"
           }}
         >
           Hit
@@ -268,8 +269,8 @@ function App() {
           onClick={stand}
           disabled={gameState !== "playing" || isLoading}
           style={{
-            padding: "0.8rem 1.5rem",
-            fontSize: "clamp(1rem, 4vw, 1.2rem)",
+            padding: "0.8rem 1rem",
+            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
             backgroundColor: gameState === "playing" ? "#45B7D1" : "#666",
             color: "white",
             border: "none",
@@ -279,8 +280,8 @@ function App() {
             transition: "all 0.2s ease",
             opacity: isLoading ? 0.7 : 1,
             flex: "1",
-            minWidth: "120px",
-            maxWidth: "200px"
+            minWidth: "100px",
+            maxWidth: "180px"
           }}
         >
           Stand
