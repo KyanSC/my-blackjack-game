@@ -9,15 +9,14 @@ app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
 
-# CORS configuration to allow frontend requests from local development servers
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "http://localhost:3000",  # Local development
+        "https://blackjack-frontend-nf1ad9xdt-kyans-projects-4396b957.vercel.app",  # Your Vercel deployment
+        "https://blackjack-game-kyan.vercel.app"  # Your Vercel deployment (alternate URL)
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
