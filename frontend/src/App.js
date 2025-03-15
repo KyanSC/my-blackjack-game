@@ -39,7 +39,7 @@ function App() {
       setGameState("playing");
       setIsBlackjack(false);
       setMessage("");
-      const response = await fetch("http://127.0.0.1:8000/start");
+      const response = await fetch("https://my-blackjack-game-production.up.railway.app/start");
       const data = await response.json();
       setPlayerHand(data.player_hand);
       setDealerHand(data.dealer_hand);
@@ -72,7 +72,7 @@ function App() {
     
     setIsLoading(true);
     try {
-        const response = await fetch('http://localhost:8000/hit');
+        const response = await fetch('https://my-blackjack-game-production.up.railway.app/hit');
         const data = await response.json();
         setPlayerHand(data.player_hand);
         if (data.dealer_hand) {  // If dealer's hand is returned (game over)
@@ -102,7 +102,7 @@ function App() {
     
     try {
       setIsLoading(true);
-      const response = await fetch("http://127.0.0.1:8000/stand");
+      const response = await fetch("https://my-blackjack-game-production.up.railway.app/stand");
       const data = await response.json();
       setDealerHand(data.dealer_hand);
       if (data.result) {
