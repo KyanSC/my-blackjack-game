@@ -30,21 +30,33 @@ const Card = ({ rank, suit, hidden }) => {
     }
   };
 
+  // Get card dimensions based on screen size
+  const getCardDimensions = () => {
+    if (window.innerWidth <= 480) {
+      return { width: "80px", height: "120px", fontSize: "16px", centerSize: "40px" };
+    }
+    if (window.innerWidth <= 768) {
+      return { width: "100px", height: "150px", fontSize: "20px", centerSize: "50px" };
+    }
+    return { width: "120px", height: "180px", fontSize: "24px", centerSize: "60px" };
+  };
+
   const { symbol, color } = getSuitSymbol(suit);
   const displayRank = getDisplayRank(rank);
   const isHidden = hidden || suit === "Hidden";
+  const dimensions = getCardDimensions();
 
   return (
     <div
       style={{
         display: "inline-block",
-        margin: "5px",
+        margin: "2px",
         position: "relative",
-        width: "120px",
-        height: "180px",
+        width: dimensions.width,
+        height: dimensions.height,
         backgroundColor: isHidden ? "#44BBA4" : "#FFFFFF",
-        borderRadius: "12px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+        borderRadius: "8px",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
         border: "1px solid rgba(0,0,0,0.1)",
         overflow: "hidden"
       }}
@@ -53,23 +65,23 @@ const Card = ({ rank, suit, hidden }) => {
         <div style={{
           width: "100%",
           height: "100%",
-          padding: "12px",
+          padding: "8px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between"
         }}>
           {/* Top rank and suit */}
-          <div style={{ color: color, fontSize: "24px", fontWeight: "bold" }}>
+          <div style={{ color: color, fontSize: dimensions.fontSize, fontWeight: "bold" }}>
             {displayRank}
-            <span style={{ marginLeft: "4px" }}>{symbol}</span>
+            <span style={{ marginLeft: "2px" }}>{symbol}</span>
           </div>
 
           {/* Center suit */}
           <div style={{ 
             color: color,
-            fontSize: "60px",
+            fontSize: dimensions.centerSize,
             textAlign: "center",
-            transform: "translateY(-10px)"
+            transform: "translateY(-5px)"
           }}>
             {symbol}
           </div>
@@ -77,13 +89,13 @@ const Card = ({ rank, suit, hidden }) => {
           {/* Bottom rank and suit (inverted) */}
           <div style={{ 
             color: color,
-            fontSize: "24px",
+            fontSize: dimensions.fontSize,
             fontWeight: "bold",
             alignSelf: "flex-end",
             transform: "rotate(180deg)"
           }}>
             {displayRank}
-            <span style={{ marginLeft: "4px" }}>{symbol}</span>
+            <span style={{ marginLeft: "2px" }}>{symbol}</span>
           </div>
         </div>
       ) : (
@@ -93,7 +105,7 @@ const Card = ({ rank, suit, hidden }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "60px",
+          fontSize: dimensions.centerSize,
           color: "#FFFFFF"
         }}>
           ★

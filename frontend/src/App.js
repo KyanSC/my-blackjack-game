@@ -155,8 +155,9 @@ function App() {
   return (
     <div className="app-container" style={{
       minHeight: "100vh",
+      width: "100%",
       background: "linear-gradient(135deg, #1A535C 0%, #4ECDC4 100%)",
-      padding: "2rem",
+      padding: "1rem",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -176,13 +177,15 @@ function App() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              fontSize: "5rem",
+              fontSize: "clamp(2rem, 10vw, 5rem)",
               color: "#FFE66D",
               textShadow: "0 0 20px rgba(255,230,109,0.8)",
               zIndex: 1000,
               pointerEvents: "none",
               background: "rgba(0,0,0,0.3)",
-              backdropFilter: "blur(5px)"
+              backdropFilter: "blur(5px)",
+              textAlign: "center",
+              padding: "1rem"
             }}
           >
             BLACKJACK! 🎉
@@ -191,18 +194,24 @@ function App() {
       </AnimatePresence>
 
       <h1 style={{
-        fontSize: "3rem",
+        fontSize: "clamp(2rem, 8vw, 3rem)",
         color: "#FFE66D",
         textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-        marginBottom: "2rem"
+        marginBottom: "1rem",
+        textAlign: "center"
       }}>
         Blackjack
       </h1>
 
       <div style={{
         display: "flex",
-        gap: "1rem",
-        marginBottom: "2rem"
+        flexWrap: "wrap",
+        gap: "0.5rem",
+        marginBottom: "1rem",
+        justifyContent: "center",
+        width: "100%",
+        maxWidth: "100vw",
+        padding: "0 1rem"
       }}>
         <motion.button
           whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
@@ -210,8 +219,8 @@ function App() {
           onClick={startGame}
           disabled={gameState === "playing" || isLoading}
           style={{
-            padding: "0.8rem 2rem",
-            fontSize: "1.2rem",
+            padding: "0.8rem 1.5rem",
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
             backgroundColor: gameState === "playing" ? "#666" : "#FF6B6B",
             color: "white",
             border: "none",
@@ -219,7 +228,10 @@ function App() {
             cursor: gameState === "playing" || isLoading ? "not-allowed" : "pointer",
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
             transition: "all 0.2s ease",
-            opacity: isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
+            flex: "1",
+            minWidth: "120px",
+            maxWidth: "200px"
           }}
         >
           {gameState === "playing" ? "Game in Progress" : "Start Game"}
@@ -230,8 +242,8 @@ function App() {
           onClick={hit}
           disabled={gameState !== "playing" || isLoading}
           style={{
-            padding: "0.8rem 2rem",
-            fontSize: "1.2rem",
+            padding: "0.8rem 1.5rem",
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
             backgroundColor: gameState === "playing" ? "#4ECDC4" : "#666",
             color: "white",
             border: "none",
@@ -239,7 +251,10 @@ function App() {
             cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
             transition: "all 0.2s ease",
-            opacity: isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
+            flex: "1",
+            minWidth: "120px",
+            maxWidth: "200px"
           }}
         >
           Hit
@@ -250,8 +265,8 @@ function App() {
           onClick={stand}
           disabled={gameState !== "playing" || isLoading}
           style={{
-            padding: "0.8rem 2rem",
-            fontSize: "1.2rem",
+            padding: "0.8rem 1.5rem",
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
             backgroundColor: gameState === "playing" ? "#45B7D1" : "#666",
             color: "white",
             border: "none",
@@ -259,7 +274,10 @@ function App() {
             cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
             transition: "all 0.2s ease",
-            opacity: isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
+            flex: "1",
+            minWidth: "120px",
+            maxWidth: "200px"
           }}
         >
           Stand
@@ -271,13 +289,16 @@ function App() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
-            padding: "1rem 2rem",
+            padding: "1rem",
             backgroundColor: "rgba(255,255,255,0.9)",
             borderRadius: "8px",
-            marginBottom: "2rem",
-            fontSize: "1.2rem",
+            marginBottom: "1rem",
+            fontSize: "clamp(1rem, 4vw, 1.2rem)",
             color: "#1A535C",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+            width: "90%",
+            maxWidth: "600px",
+            textAlign: "center"
           }}>
           {message}
         </motion.div>
@@ -287,21 +308,25 @@ function App() {
         width: "100%",
         maxWidth: "1200px",
         display: "flex",
+        flexDirection: window.innerWidth <= 768 ? "column" : "row",
         justifyContent: "space-around",
-        alignItems: "flex-start",
-        gap: "2rem"
+        alignItems: "center",
+        gap: "1rem",
+        padding: "0 1rem"
       }}>
         <div style={{
           flex: 1,
+          width: "100%",
           backgroundColor: "rgba(255,255,255,0.1)",
           borderRadius: "16px",
-          padding: "2rem",
+          padding: "1rem",
           backdropFilter: "blur(10px)"
         }}>
           <h2 style={{
             color: "#FFE66D",
             textAlign: "center",
-            marginBottom: "1rem"
+            marginBottom: "1rem",
+            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
           }}>
             Player's Hand
           </h2>
@@ -310,15 +335,17 @@ function App() {
 
         <div style={{
           flex: 1,
+          width: "100%",
           backgroundColor: "rgba(255,255,255,0.1)",
           borderRadius: "16px",
-          padding: "2rem",
+          padding: "1rem",
           backdropFilter: "blur(10px)"
         }}>
           <h2 style={{
             color: "#FFE66D",
             textAlign: "center",
-            marginBottom: "1rem"
+            marginBottom: "1rem",
+            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
           }}>
             Dealer's Hand
           </h2>
