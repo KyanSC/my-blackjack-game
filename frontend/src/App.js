@@ -156,13 +156,15 @@ function App() {
     <div className="app-container" style={{
       minHeight: "100vh",
       width: "100%",
+      maxWidth: "100%",
       background: "linear-gradient(135deg, #1A535C 0%, #4ECDC4 100%)",
       padding: "1rem",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       position: "relative",
-      overflow: "hidden"
+      overflow: "hidden",
+      margin: 0
     }}>
       <AnimatePresence>
         {isBlackjack && (
@@ -210,8 +212,9 @@ function App() {
         marginBottom: "1rem",
         justifyContent: "center",
         width: "100%",
-        maxWidth: "100vw",
-        padding: "0 1rem"
+        maxWidth: "100%",
+        padding: "0",
+        overflow: "hidden"
       }}>
         <motion.button
           whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
@@ -306,21 +309,24 @@ function App() {
 
       <div style={{
         width: "100%",
-        maxWidth: "1200px",
+        maxWidth: "100%",
         display: "flex",
         flexDirection: window.innerWidth <= 768 ? "column" : "row",
         justifyContent: "space-around",
         alignItems: "center",
         gap: "1rem",
-        padding: "0 1rem"
+        padding: "0",
+        overflow: "hidden"
       }}>
         <div style={{
           flex: 1,
           width: "100%",
+          maxWidth: "100%",
           backgroundColor: "rgba(255,255,255,0.1)",
           borderRadius: "16px",
           padding: "1rem",
-          backdropFilter: "blur(10px)"
+          backdropFilter: "blur(10px)",
+          overflow: "hidden"
         }}>
           <h2 style={{
             color: "#FFE66D",
@@ -336,10 +342,12 @@ function App() {
         <div style={{
           flex: 1,
           width: "100%",
+          maxWidth: "100%",
           backgroundColor: "rgba(255,255,255,0.1)",
           borderRadius: "16px",
           padding: "1rem",
-          backdropFilter: "blur(10px)"
+          backdropFilter: "blur(10px)",
+          overflow: "hidden"
         }}>
           <h2 style={{
             color: "#FFE66D",

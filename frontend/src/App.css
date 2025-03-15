@@ -1,3 +1,12 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
 body {
   background: linear-gradient(45deg, #3f87a6, #ff7eb3);
   color: white;
@@ -6,7 +15,6 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
   text-align: center;
 }
 
