@@ -3,6 +3,8 @@ import "./App.css";
 import Hand from "./Hand";
 import { motion, AnimatePresence } from "framer-motion";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+
 /**
  * Main App component that manages the Blackjack game state and user interactions
  * Handles game logic through API calls to the backend server
@@ -39,7 +41,7 @@ function App() {
       setGameState("playing");
       setIsBlackjack(false);
       setMessage("");
-      const response = await fetch("https://my-blackjack-game-production.up.railway.app/start");
+      const response = await fetch(`${BACKEND_URL}/start`);
       const data = await response.json();
       setPlayerHand(data.player_hand);
       setDealerHand(data.dealer_hand);
@@ -72,7 +74,7 @@ function App() {
     
     setIsLoading(true);
     try {
-        const response = await fetch('https://my-blackjack-game-production.up.railway.app/hit');
+        const response = await fetch(`${BACKEND_URL}/hit`);
         const data = await response.json();
         setPlayerHand(data.player_hand);
         if (data.dealer_hand) {  // If dealer's hand is returned (game over)
@@ -102,7 +104,7 @@ function App() {
     
     try {
       setIsLoading(true);
-      const response = await fetch("https://my-blackjack-game-production.up.railway.app/stand");
+      const response = await fetch(`${BACKEND_URL}/stand`);
       const data = await response.json();
       setDealerHand(data.dealer_hand);
       if (data.result) {
