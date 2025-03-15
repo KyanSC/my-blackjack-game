@@ -154,20 +154,15 @@ function App() {
 
   return (
     <div className="app-container" style={{
-      height: "100vh",
-      width: "100vw",
-      background: "linear-gradient(135deg, #1A535C 0%, #4ECDC4 100%)",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      margin: 0,
-      padding: 0,
-      overflow: "hidden"
+      minHeight: "100vh",
+  width: "100vw",
+  background: "linear-gradient(135deg, #1A535C 0%, #4ECDC4 100%)",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  position: "relative", /* Fix: Allow scrolling */
+  overflowX: "auto",
+  overflowY: "auto"
     }}>
       <div style={{
         width: "100%",

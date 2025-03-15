@@ -7,10 +7,9 @@
 
 html, body, #root {
   min-height: 100vh;
-  min-width: 100vw;
-  overflow-x: auto;
+  width: 100vw;
+  overflow-x: auto;  /* Fix: Enable scrolling only when needed */
   overflow-y: auto;
-  position: relative;
 }
 
 body {
@@ -32,15 +31,10 @@ body {
 
 /* Layout containers */
 .app-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 100%;
-  min-height: 100vh;
-  overflow-x: auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 1rem;
+  min-width: 100vw; /* Fix: Prevents shrinking too much */
+  width: 100%; /* Allows it to expand */
+  max-width: none; /* Prevents artificial restrictions */
+  overflow-x: auto; /* Allows scrolling */
 }
 
 /* Typography */
