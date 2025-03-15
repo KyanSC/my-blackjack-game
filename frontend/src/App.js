@@ -4,6 +4,7 @@ import Hand from "./Hand";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+console.log('Backend URL:', BACKEND_URL);
 
 /**
  * Main App component that manages the Blackjack game state and user interactions
@@ -41,8 +42,11 @@ function App() {
       setGameState("playing");
       setIsBlackjack(false);
       setMessage("");
+      console.log('Making start game request to:', `${BACKEND_URL}/start`);
       const response = await fetch(`${BACKEND_URL}/start`);
+      console.log('Start game response:', response.status);
       const data = await response.json();
+      console.log('Start game data:', data);
       setPlayerHand(data.player_hand);
       setDealerHand(data.dealer_hand);
       
@@ -59,7 +63,7 @@ function App() {
       }
     } catch (error) {
       console.error("Error starting game: ", error);
-      setMessage("Error starting game");
+      setMessage(`Error starting game: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -74,23 +78,27 @@ function App() {
     
     setIsLoading(true);
     try {
-        const response = await fetch(`${BACKEND_URL}/hit`);
-        const data = await response.json();
-        setPlayerHand(data.player_hand);
-        if (data.dealer_hand) {  // If dealer's hand is returned (game over)
-            setDealerHand(data.dealer_hand);
-            setGameState("ended");
-            if (data.message.includes("win")) {
-                showCelebration();
-            }
+      console.log('Making hit request to:', `${BACKEND_URL}/hit`);
+      const response = await fetch(`${BACKEND_URL}/hit`);
+      console.log('Hit response:', response.status);
+      const data = await response.json();
+      console.log('Hit data:', data);
+      setPlayerHand(data.player_hand);
+      if (data.dealer_hand) {  // If dealer's hand is returned (game over)
+        setDealerHand(data.dealer_hand);
+        setGameState("ended");
+        if (data.message.includes("win")) {
+          showCelebration();
         }
-        // Also set game state to ended if player busts or gets 21
-        if (data.message && (data.message.includes("Bust") || data.message.includes("21"))) {
-            setGameState("ended");
-        }
-        setMessage(data.message);
+      }
+      // Also set game state to ended if player busts or gets 21
+      if (data.message && (data.message.includes("Bust") || data.message.includes("21"))) {
+        setGameState("ended");
+      }
+      setMessage(data.message);
     } catch (error) {
-        setMessage("Error connecting to server");
+      console.error("Error during hit:", error);
+      setMessage(`Error connecting to server: ${error.message}`);
     }
     setIsLoading(false);
   };
@@ -104,8 +112,11 @@ function App() {
     
     try {
       setIsLoading(true);
+      console.log('Making stand request to:', `${BACKEND_URL}/stand`);
       const response = await fetch(`${BACKEND_URL}/stand`);
+      console.log('Stand response:', response.status);
       const data = await response.json();
+      console.log('Stand data:', data);
       setDealerHand(data.dealer_hand);
       if (data.result) {
         setMessage(data.result);
@@ -116,7 +127,7 @@ function App() {
       }
     } catch (error) {
       console.error("Error during stand:", error);
-      setMessage("Error during stand.");
+      setMessage(`Error during stand: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
