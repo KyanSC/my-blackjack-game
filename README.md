@@ -1,6 +1,8 @@
 # Blackjack Game
 Modern, interactive Blackjack game built with React frontend and FastAPI backend. Play against a dealer with a sleek, responsive interface and msooth animations throughout.
 
+**Note:** This game runs on **mobile devices**, but the full screen may not be visible. For the best experience, play on a **desktop or laptop**.
+
 ## Features: 
  - Classic Blackjack gameplay
  - Instant Blackjack detection (Player & Dealer)
