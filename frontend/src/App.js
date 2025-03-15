@@ -155,66 +155,34 @@ function App() {
   return (
     <div className="app-container" style={{
       minHeight: "100vh",
-      width: "100%",
-      maxWidth: "100%",
+      width: "100vw",
+      maxWidth: "100vw",
       background: "linear-gradient(135deg, #1A535C 0%, #4ECDC4 100%)",
-      padding: "1rem",
+      padding: "0.5rem",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       position: "relative",
-      overflowX: "hidden",
-      overflowY: "auto",
       margin: 0,
       boxSizing: "border-box"
     }}>
-      <AnimatePresence>
-        {isBlackjack && (
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: 180 }}
-            transition={{ duration: 0.5, type: "spring" }}
-            style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "clamp(2rem, 10vw, 5rem)",
-              color: "#FFE66D",
-              textShadow: "0 0 20px rgba(255,230,109,0.8)",
-              zIndex: 1000,
-              pointerEvents: "none",
-              background: "rgba(0,0,0,0.3)",
-              backdropFilter: "blur(5px)",
-              textAlign: "center",
-              padding: "1rem",
-              width: "100%",
-              height: "100%"
-            }}
-          >
-            BLACKJACK! 🎉
-          </motion.div>
-        )}
-      </AnimatePresence>
       <div style={{
-        position: "sticky",
+        position: "fixed",
         top: 0,
+        left: 0,
+        right: 0,
         width: "100%",
         zIndex: 2,
-        backgroundColor: "rgba(26, 83, 92, 0.9)",
+        backgroundColor: "rgba(26, 83, 92, 0.95)",
         backdropFilter: "blur(5px)",
-        padding: "0.5rem",
-        marginBottom: "1rem"
+        padding: "0.5rem 0",
+        borderBottom: "1px solid rgba(255,255,255,0.1)"
       }}>
         <h1 style={{
-          fontSize: "clamp(2rem, 8vw, 3rem)",
+          fontSize: "clamp(1.5rem, 6vw, 2.5rem)",
           color: "#FFE66D",
           textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-          margin: "0.5rem 0",
+          margin: "0.25rem 0",
           textAlign: "center"
         }}>
           Blackjack
@@ -222,13 +190,11 @@ function App() {
 
         <div style={{
           display: "flex",
-          flexWrap: "wrap",
-          gap: "0.5rem",
           justifyContent: "center",
+          gap: "0.25rem",
+          padding: "0.25rem",
           width: "100%",
-          maxWidth: "100%",
-          padding: "0 0.5rem",
-          boxSizing: "border-box"
+          maxWidth: "100%"
         }}>
           <motion.button
             whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
@@ -236,23 +202,22 @@ function App() {
             onClick={startGame}
             disabled={gameState === "playing" || isLoading}
             style={{
-              padding: "0.8rem 1rem",
-              fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+              padding: "0.5rem",
+              fontSize: "0.9rem",
               backgroundColor: gameState === "playing" ? "#666" : "#FF6B6B",
               color: "white",
               border: "none",
               borderRadius: "8px",
               cursor: gameState === "playing" || isLoading ? "not-allowed" : "pointer",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               transition: "all 0.2s ease",
               opacity: isLoading ? 0.7 : 1,
-              flex: "1",
-              minWidth: "90px",
-              maxWidth: "150px",
-              whiteSpace: "nowrap"
+              flex: 1,
+              minWidth: "80px",
+              maxWidth: "120px"
             }}
           >
-            {gameState === "playing" ? "In Progress" : "New Game"}
+            {gameState === "playing" ? "Playing" : "New"}
           </motion.button>
           <motion.button
             whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
@@ -260,19 +225,19 @@ function App() {
             onClick={hit}
             disabled={gameState !== "playing" || isLoading}
             style={{
-              padding: "0.8rem 1rem",
-              fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+              padding: "0.5rem",
+              fontSize: "0.9rem",
               backgroundColor: gameState === "playing" ? "#4ECDC4" : "#666",
               color: "white",
               border: "none",
               borderRadius: "8px",
               cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               transition: "all 0.2s ease",
               opacity: isLoading ? 0.7 : 1,
-              flex: "1",
-              minWidth: "90px",
-              maxWidth: "150px"
+              flex: 1,
+              minWidth: "80px",
+              maxWidth: "120px"
             }}
           >
             Hit
@@ -283,19 +248,19 @@ function App() {
             onClick={stand}
             disabled={gameState !== "playing" || isLoading}
             style={{
-              padding: "0.8rem 1rem",
-              fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+              padding: "0.5rem",
+              fontSize: "0.9rem",
               backgroundColor: gameState === "playing" ? "#45B7D1" : "#666",
               color: "white",
               border: "none",
               borderRadius: "8px",
               cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               transition: "all 0.2s ease",
               opacity: isLoading ? 0.7 : 1,
-              flex: "1",
-              minWidth: "90px",
-              maxWidth: "150px"
+              flex: 1,
+              minWidth: "80px",
+              maxWidth: "120px"
             }}
           >
             Stand
@@ -303,79 +268,71 @@ function App() {
         </div>
       </div>
 
-      {message && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{
-            padding: "1rem",
-            backgroundColor: "rgba(255,255,255,0.9)",
-            borderRadius: "8px",
-            marginBottom: "1rem",
-            fontSize: "clamp(1rem, 4vw, 1.2rem)",
-            color: "#1A535C",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-            width: "90%",
-            maxWidth: "600px",
-            textAlign: "center",
-            zIndex: 1
-          }}>
-          {message}
-        </motion.div>
-      )}
-
-      <div style={{
-        width: "100%",
-        maxWidth: "100%",
-        display: "flex",
-        flexDirection: window.innerWidth <= 768 ? "column" : "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        gap: "1rem",
-        padding: "0 0.5rem",
-        boxSizing: "border-box",
-        marginBottom: "1rem"
-      }}>
-        <div style={{
-          flex: 1,
-          width: "100%",
-          maxWidth: "100%",
-          backgroundColor: "rgba(255,255,255,0.1)",
-          borderRadius: "16px",
-          padding: "1rem",
-          backdropFilter: "blur(10px)",
-          overflow: "hidden"
-        }}>
-          <h2 style={{
-            color: "#FFE66D",
-            textAlign: "center",
-            marginBottom: "1rem",
-            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
-          }}>
-            Player's Hand
-          </h2>
-          <Hand cards={playerHand} />
-        </div>
+      <div style={{ marginTop: "120px", width: "100%", maxWidth: "100%" }}>
+        {message && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              padding: "0.75rem",
+              backgroundColor: "rgba(255,255,255,0.9)",
+              borderRadius: "8px",
+              marginBottom: "1rem",
+              fontSize: "0.9rem",
+              color: "#1A535C",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              width: "90%",
+              margin: "0 auto 1rem auto",
+              textAlign: "center",
+              zIndex: 1
+            }}>
+            {message}
+          </motion.div>
+        )}
 
         <div style={{
-          flex: 1,
           width: "100%",
-          maxWidth: "100%",
-          backgroundColor: "rgba(255,255,255,0.1)",
-          borderRadius: "16px",
-          padding: "1rem",
-          backdropFilter: "blur(10px)",
-          overflow: "hidden"
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          padding: "0 0.5rem",
+          boxSizing: "border-box"
         }}>
-          <h2 style={{
-            color: "#FFE66D",
-            textAlign: "center",
-            marginBottom: "1rem",
-            fontSize: "clamp(1.2rem, 5vw, 1.5rem)"
+          <div style={{
+            width: "100%",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            borderRadius: "16px",
+            padding: "0.75rem",
+            backdropFilter: "blur(10px)"
           }}>
-            Dealer's Hand
-          </h2>
-          <Hand cards={dealerHand} />
+            <h2 style={{
+              color: "#FFE66D",
+              textAlign: "center",
+              margin: "0 0 0.5rem 0",
+              fontSize: "1rem"
+            }}>
+              Player's Hand
+            </h2>
+            <Hand cards={playerHand} />
+          </div>
+
+          <div style={{
+            width: "100%",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            borderRadius: "16px",
+            padding: "0.75rem",
+            backdropFilter: "blur(10px)"
+          }}>
+            <h2 style={{
+              color: "#FFE66D",
+              textAlign: "center",
+              margin: "0 0 0.5rem 0",
+              fontSize: "1rem"
+            }}>
+              Dealer's Hand
+            </h2>
+            <Hand cards={dealerHand} />
+          </div>
         </div>
       </div>
     </div>
