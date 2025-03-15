@@ -163,8 +163,10 @@ function App() {
       flexDirection: "column",
       alignItems: "center",
       position: "relative",
-      overflow: "hidden",
-      margin: 0
+      overflowX: "hidden",
+      overflowY: "auto",
+      margin: 0,
+      boxSizing: "border-box"
     }}>
       <AnimatePresence>
         {isBlackjack && (
@@ -175,7 +177,9 @@ function App() {
             transition={{ duration: 0.5, type: "spring" }}
             style={{
               position: "fixed",
-              inset: 0,
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -187,105 +191,116 @@ function App() {
               background: "rgba(0,0,0,0.3)",
               backdropFilter: "blur(5px)",
               textAlign: "center",
-              padding: "1rem"
+              padding: "1rem",
+              width: "100%",
+              height: "100%"
             }}
           >
             BLACKJACK! 🎉
           </motion.div>
         )}
       </AnimatePresence>
-
-      <h1 style={{
-        fontSize: "clamp(2rem, 8vw, 3rem)",
-        color: "#FFE66D",
-        textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-        marginBottom: "1rem",
-        textAlign: "center"
-      }}>
-        Blackjack
-      </h1>
-
       <div style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "0.5rem",
-        marginBottom: "1rem",
-        justifyContent: "center",
+        position: "sticky",
+        top: 0,
         width: "100%",
-        maxWidth: "100%",
-        padding: "0 0.5rem",
-        overflow: "visible"
+        zIndex: 2,
+        backgroundColor: "rgba(26, 83, 92, 0.9)",
+        backdropFilter: "blur(5px)",
+        padding: "0.5rem",
+        marginBottom: "1rem"
       }}>
-        <motion.button
-          whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
-          whileTap={{ scale: gameState !== "playing" ? 0.95 : 1 }}
-          onClick={startGame}
-          disabled={gameState === "playing" || isLoading}
-          style={{
-            padding: "0.8rem 1rem",
-            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
-            backgroundColor: gameState === "playing" ? "#666" : "#FF6B6B",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: gameState === "playing" || isLoading ? "not-allowed" : "pointer",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-            transition: "all 0.2s ease",
-            opacity: isLoading ? 0.7 : 1,
-            flex: "1",
-            minWidth: "100px",
-            maxWidth: "180px",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {gameState === "playing" ? "In Progress" : "Start Game"}
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
-          whileTap={{ scale: gameState === "playing" ? 0.95 : 1 }}
-          onClick={hit}
-          disabled={gameState !== "playing" || isLoading}
-          style={{
-            padding: "0.8rem 1rem",
-            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
-            backgroundColor: gameState === "playing" ? "#4ECDC4" : "#666",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-            transition: "all 0.2s ease",
-            opacity: isLoading ? 0.7 : 1,
-            flex: "1",
-            minWidth: "100px",
-            maxWidth: "180px"
-          }}
-        >
-          Hit
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
-          whileTap={{ scale: gameState === "playing" ? 0.95 : 1 }}
-          onClick={stand}
-          disabled={gameState !== "playing" || isLoading}
-          style={{
-            padding: "0.8rem 1rem",
-            fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
-            backgroundColor: gameState === "playing" ? "#45B7D1" : "#666",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
-            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-            transition: "all 0.2s ease",
-            opacity: isLoading ? 0.7 : 1,
-            flex: "1",
-            minWidth: "100px",
-            maxWidth: "180px"
-          }}
-        >
-          Stand
-        </motion.button>
+        <h1 style={{
+          fontSize: "clamp(2rem, 8vw, 3rem)",
+          color: "#FFE66D",
+          textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
+          margin: "0.5rem 0",
+          textAlign: "center"
+        }}>
+          Blackjack
+        </h1>
+
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0.5rem",
+          justifyContent: "center",
+          width: "100%",
+          maxWidth: "100%",
+          padding: "0 0.5rem",
+          boxSizing: "border-box"
+        }}>
+          <motion.button
+            whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
+            whileTap={{ scale: gameState !== "playing" ? 0.95 : 1 }}
+            onClick={startGame}
+            disabled={gameState === "playing" || isLoading}
+            style={{
+              padding: "0.8rem 1rem",
+              fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+              backgroundColor: gameState === "playing" ? "#666" : "#FF6B6B",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: gameState === "playing" || isLoading ? "not-allowed" : "pointer",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              transition: "all 0.2s ease",
+              opacity: isLoading ? 0.7 : 1,
+              flex: "1",
+              minWidth: "90px",
+              maxWidth: "150px",
+              whiteSpace: "nowrap"
+            }}
+          >
+            {gameState === "playing" ? "In Progress" : "New Game"}
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
+            whileTap={{ scale: gameState === "playing" ? 0.95 : 1 }}
+            onClick={hit}
+            disabled={gameState !== "playing" || isLoading}
+            style={{
+              padding: "0.8rem 1rem",
+              fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+              backgroundColor: gameState === "playing" ? "#4ECDC4" : "#666",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              transition: "all 0.2s ease",
+              opacity: isLoading ? 0.7 : 1,
+              flex: "1",
+              minWidth: "90px",
+              maxWidth: "150px"
+            }}
+          >
+            Hit
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
+            whileTap={{ scale: gameState === "playing" ? 0.95 : 1 }}
+            onClick={stand}
+            disabled={gameState !== "playing" || isLoading}
+            style={{
+              padding: "0.8rem 1rem",
+              fontSize: "clamp(0.9rem, 3.5vw, 1.2rem)",
+              backgroundColor: gameState === "playing" ? "#45B7D1" : "#666",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: gameState === "playing" && !isLoading ? "pointer" : "not-allowed",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              transition: "all 0.2s ease",
+              opacity: isLoading ? 0.7 : 1,
+              flex: "1",
+              minWidth: "90px",
+              maxWidth: "150px"
+            }}
+          >
+            Stand
+          </motion.button>
+        </div>
       </div>
 
       {message && (
@@ -302,7 +317,8 @@ function App() {
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
             width: "90%",
             maxWidth: "600px",
-            textAlign: "center"
+            textAlign: "center",
+            zIndex: 1
           }}>
           {message}
         </motion.div>
@@ -316,8 +332,9 @@ function App() {
         justifyContent: "space-around",
         alignItems: "center",
         gap: "1rem",
-        padding: "0",
-        overflow: "hidden"
+        padding: "0 0.5rem",
+        boxSizing: "border-box",
+        marginBottom: "1rem"
       }}>
         <div style={{
           flex: 1,
