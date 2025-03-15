@@ -154,35 +154,33 @@ function App() {
 
   return (
     <div className="app-container" style={{
-      minHeight: "100vh",
+      height: "100vh",
       width: "100vw",
-      maxWidth: "100vw",
       background: "linear-gradient(135deg, #1A535C 0%, #4ECDC4 100%)",
-      padding: "0.5rem",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      position: "relative",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
       margin: 0,
-      boxSizing: "border-box"
+      padding: 0,
+      overflow: "hidden"
     }}>
       <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
         width: "100%",
-        zIndex: 2,
+        padding: "0.5rem",
         backgroundColor: "rgba(26, 83, 92, 0.95)",
         backdropFilter: "blur(5px)",
-        padding: "0.5rem 0",
         borderBottom: "1px solid rgba(255,255,255,0.1)"
       }}>
         <h1 style={{
-          fontSize: "clamp(1.5rem, 6vw, 2.5rem)",
+          fontSize: "min(6vw, 2rem)",
           color: "#FFE66D",
           textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-          margin: "0.25rem 0",
+          margin: 0,
           textAlign: "center"
         }}>
           Blackjack
@@ -191,10 +189,9 @@ function App() {
         <div style={{
           display: "flex",
           justifyContent: "center",
-          gap: "0.25rem",
-          padding: "0.25rem",
-          width: "100%",
-          maxWidth: "100%"
+          gap: "0.5rem",
+          padding: "0.5rem",
+          width: "100%"
         }}>
           <motion.button
             whileHover={{ scale: gameState !== "playing" ? 1.05 : 1 }}
@@ -203,7 +200,7 @@ function App() {
             disabled={gameState === "playing" || isLoading}
             style={{
               padding: "0.5rem",
-              fontSize: "0.9rem",
+              fontSize: "min(4vw, 1rem)",
               backgroundColor: gameState === "playing" ? "#666" : "#FF6B6B",
               color: "white",
               border: "none",
@@ -213,11 +210,10 @@ function App() {
               transition: "all 0.2s ease",
               opacity: isLoading ? 0.7 : 1,
               flex: 1,
-              minWidth: "80px",
-              maxWidth: "120px"
+              maxWidth: "33%"
             }}
           >
-            {gameState === "playing" ? "Playing" : "New"}
+            {gameState === "playing" ? "..." : "New"}
           </motion.button>
           <motion.button
             whileHover={{ scale: gameState === "playing" ? 1.05 : 1 }}
@@ -226,7 +222,7 @@ function App() {
             disabled={gameState !== "playing" || isLoading}
             style={{
               padding: "0.5rem",
-              fontSize: "0.9rem",
+              fontSize: "min(4vw, 1rem)",
               backgroundColor: gameState === "playing" ? "#4ECDC4" : "#666",
               color: "white",
               border: "none",
@@ -236,8 +232,7 @@ function App() {
               transition: "all 0.2s ease",
               opacity: isLoading ? 0.7 : 1,
               flex: 1,
-              minWidth: "80px",
-              maxWidth: "120px"
+              maxWidth: "33%"
             }}
           >
             Hit
@@ -249,7 +244,7 @@ function App() {
             disabled={gameState !== "playing" || isLoading}
             style={{
               padding: "0.5rem",
-              fontSize: "0.9rem",
+              fontSize: "min(4vw, 1rem)",
               backgroundColor: gameState === "playing" ? "#45B7D1" : "#666",
               color: "white",
               border: "none",
@@ -259,8 +254,7 @@ function App() {
               transition: "all 0.2s ease",
               opacity: isLoading ? 0.7 : 1,
               flex: 1,
-              minWidth: "80px",
-              maxWidth: "120px"
+              maxWidth: "33%"
             }}
           >
             Stand
@@ -268,70 +262,82 @@ function App() {
         </div>
       </div>
 
-      <div style={{ marginTop: "120px", width: "100%", maxWidth: "100%" }}>
+      <div style={{
+        flex: 1,
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        padding: "0.5rem"
+      }}>
         {message && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             style={{
-              padding: "0.75rem",
+              padding: "0.5rem",
               backgroundColor: "rgba(255,255,255,0.9)",
               borderRadius: "8px",
-              marginBottom: "1rem",
-              fontSize: "0.9rem",
+              marginBottom: "0.5rem",
+              fontSize: "min(4vw, 1rem)",
               color: "#1A535C",
               boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              width: "90%",
-              margin: "0 auto 1rem auto",
-              textAlign: "center",
-              zIndex: 1
+              width: "100%",
+              textAlign: "center"
             }}>
             {message}
           </motion.div>
         )}
 
         <div style={{
-          width: "100%",
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: "1rem",
-          padding: "0 0.5rem",
-          boxSizing: "border-box"
+          gap: "0.5rem",
+          overflow: "hidden"
         }}>
           <div style={{
-            width: "100%",
+            flex: 1,
             backgroundColor: "rgba(255,255,255,0.1)",
             borderRadius: "16px",
-            padding: "0.75rem",
-            backdropFilter: "blur(10px)"
+            padding: "0.5rem",
+            backdropFilter: "blur(10px)",
+            display: "flex",
+            flexDirection: "column"
           }}>
             <h2 style={{
               color: "#FFE66D",
               textAlign: "center",
               margin: "0 0 0.5rem 0",
-              fontSize: "1rem"
+              fontSize: "min(4vw, 1rem)"
             }}>
               Player's Hand
             </h2>
-            <Hand cards={playerHand} />
+            <div style={{ flex: 1, overflow: "hidden" }}>
+              <Hand cards={playerHand} />
+            </div>
           </div>
 
           <div style={{
-            width: "100%",
+            flex: 1,
             backgroundColor: "rgba(255,255,255,0.1)",
             borderRadius: "16px",
-            padding: "0.75rem",
-            backdropFilter: "blur(10px)"
+            padding: "0.5rem",
+            backdropFilter: "blur(10px)",
+            display: "flex",
+            flexDirection: "column"
           }}>
             <h2 style={{
               color: "#FFE66D",
               textAlign: "center",
               margin: "0 0 0.5rem 0",
-              fontSize: "1rem"
+              fontSize: "min(4vw, 1rem)"
             }}>
               Dealer's Hand
             </h2>
-            <Hand cards={dealerHand} />
+            <div style={{ flex: 1, overflow: "hidden" }}>
+              <Hand cards={dealerHand} />
+            </div>
           </div>
         </div>
       </div>

@@ -6,72 +6,80 @@ import { motion, AnimatePresence } from "framer-motion";
  * Hand component that displays a collection of cards in a poker-style layout
  * @param {Object} props - Component props
  * @param {Array} props.cards - Array of card objects to display
+ * @param {boolean} props.isDealer - Indicates if the hand belongs to the dealer
+ * @param {boolean} props.hideFirstCard - Indicates if the first card should be hidden
  */
-function Hand({ cards }) {
-  // Calculate overlap based on screen width
-  const getOverlap = () => {
-    if (window.innerWidth <= 480) return "-2.5rem";  // More overlap on phones
-    if (window.innerWidth <= 768) return "-3rem";    // Tablet
-    return "-2rem";                                  // Desktop
+function Hand({ cards = [], isDealer = false, hideFirstCard = false }) {
+  // Calculate dimensions based on viewport
+  const getCardDimensions = () => {
+    const vw = Math.min(document.documentElement.clientWidth, window.innerWidth);
+    const vh = Math.min(document.documentElement.clientHeight, window.innerHeight);
+    const isPortrait = vh > vw;
+    
+    // Base card size on viewport width for portrait, height for landscape
+    const baseSize = isPortrait ? vw * 0.2 : vh * 0.25;
+    return {
+      width: baseSize,
+      height: baseSize * 1.4, // Standard card ratio
+    };
   };
 
-  // Calculate rotation based on screen width
-  const getRotation = (index) => {
-    const baseRotation = (index - (cards.length - 1) / 2);
-    if (window.innerWidth <= 480) return baseRotation * 3;  // Less rotation on phones
-    if (window.innerWidth <= 768) return baseRotation * 4;  // Tablet
-    return baseRotation * 5;                                // Desktop
+  // Calculate overlap based on screen size and number of cards
+  const getOverlap = () => {
+    const vw = Math.min(document.documentElement.clientWidth, window.innerWidth);
+    const baseOverlap = vw < 480 ? 0.6 : vw < 768 ? 0.7 : 0.8;
+    return baseOverlap;
   };
+
+  const { width, height } = getCardDimensions();
+  const overlap = getOverlap();
 
   return (
     <div style={{
       display: "flex",
-      flexWrap: "wrap",
-      gap: "0.5rem",
       justifyContent: "center",
-      padding: "0.5rem",
-      minHeight: "150px",
+      alignItems: "center",
+      position: "relative",
+      minHeight: height,
       width: "100%",
-      overflow: "visible"
+      padding: "0.5rem",
     }}>
       <AnimatePresence>
         {cards.map((card, index) => (
           <motion.div
-            key={`${card.rank}-${card.suit}-${index}`}
-            initial={{ opacity: 0, x: -50, scale: 0.5 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
+            key={`${card.rank}-${card.suit}`}
+            initial={{ scale: 0, x: -100, y: -100 }}
+            animate={{ 
+              scale: 1,
+              x: index * (width * overlap - width),
+              y: 0,
+            }}
+            exit={{ scale: 0 }}
             transition={{
-              delay: index * 0.2,
-              duration: 0.4,
               type: "spring",
-              stiffness: 120,
-              damping: 12
+              stiffness: 300,
+              damping: 25,
+              delay: index * 0.1,
             }}
             style={{
-              transform: `rotate(${getRotation(index)}deg)`,
-              transformOrigin: "bottom center",
-              transition: "transform 0.3s ease",
-              marginLeft: index > 0 ? getOverlap() : "0",
-              zIndex: index,
-              scale: window.innerWidth <= 480 ? 0.8 : 1  // Slightly smaller cards on phones
+              position: "absolute",
+              left: "50%",
+              transformOrigin: "center",
             }}
           >
-            <Card rank={card.rank} suit={card.suit} hidden={card.hidden} />
+            <Card
+              rank={card.rank}
+              suit={card.suit}
+              hidden={hideFirstCard && index === 0}
+              width={width}
+              height={height}
+            />
           </motion.div>
         ))}
       </AnimatePresence>
       {cards.length === 0 && (
-        <div style={{
-          width: "100%",
-          height: "150px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "rgba(255, 255, 255, 0.5)",
-          fontSize: "clamp(1rem, 4vw, 1.2rem)",
-          fontStyle: "italic"
-        }}>
-          No cards
+        <div style={{ opacity: 0.5, fontSize: "min(4vw, 1rem)" }}>
+          {isDealer ? "Dealer's hand" : "Your hand"}
         </div>
       )}
     </div>

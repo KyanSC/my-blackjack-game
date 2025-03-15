@@ -4,60 +4,58 @@
   padding: 0;
 }
 
-:root {
-  touch-action: pan-y pinch-zoom;
-}
-
-html {
-  height: 100%;
+html, body, #root {
+  height: 100vh;
   width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 body {
-  height: 100%;
-  width: 100vw;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  position: relative;
   background: linear-gradient(45deg, #3f87a6, #ff7eb3);
   color: white;
   font-family: 'Arial', sans-serif;
-  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 #root {
-  min-height: 100%;
-  width: 100vw;
-  overflow-x: hidden;
   display: flex;
-  flex-direction: column;
 }
 
 .app-container {
-  width: 100vw;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-@media screen and (max-width: 480px) {
+@media (orientation: portrait) {
+  html {
+    height: -webkit-fill-available;
+  }
   body {
-    overflow-x: hidden;
-    width: 100vw;
+    min-height: -webkit-fill-available;
   }
-  
-  #root {
-    overflow-x: hidden;
-    width: 100vw;
-  }
-  
-  .app-container {
-    overflow-x: hidden;
-    width: 100vw;
-    padding: 0;
-  }
+}
+
+/* Remove default button styles */
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
 }
 
 h1 {
@@ -70,11 +68,9 @@ h1 {
 button {
   background-color: #ff5722;
   color: white;
-  border: none;
   padding: 15px 30px;
   font-size: 1.5em;
   margin: 10px;
-  cursor: pointer;
   border-radius: 10px;
   width: 200px;
   transition: background-color 0.3s ease, transform 0.2s ease;
