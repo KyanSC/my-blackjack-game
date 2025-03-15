@@ -8,7 +8,8 @@
 html, body, #root {
   min-height: 100vh;
   min-width: 100vw;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
   position: relative;
 }
 
@@ -19,10 +20,14 @@ body {
   -webkit-tap-highlight-color: transparent;
   touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 #root {
   display: flex;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 /* Layout containers */
@@ -30,10 +35,12 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 100vw;
+  min-width: 100%;
   min-height: 100vh;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding: 1rem;
 }
 
 /* Typography */
@@ -42,6 +49,7 @@ h1 {
   font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 1rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* Button styles */
@@ -57,6 +65,7 @@ button {
   outline: none;
   padding: 0;
   touch-action: manipulation;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* Message styles */
@@ -67,17 +76,20 @@ button {
   font-weight: bold;
   margin-top: 1rem;
   padding: 1rem;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* Media queries */
 @media (max-width: 768px) {
   html, body, #root {
     position: static;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
   }
   
   .app-container {
     position: static;
-    min-width: 480px; /* Minimum width to ensure content is visible */
+    min-width: 480px;
+    padding: 0.5rem;
   }
 }
