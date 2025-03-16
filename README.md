@@ -36,7 +36,7 @@ If you want to run the project locally:
 ```bash
 cd backend
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn backend:app --reload
 ```
 
 3. Set up the frontend:
